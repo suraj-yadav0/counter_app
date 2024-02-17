@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:counter_app/counter_bloc/counter_bloc.dart';
 import 'package:counter_app/counter_bloc/counter_event.dart';
 import 'package:counter_app/counter_bloc/counter_state.dart';
@@ -32,22 +33,69 @@ class MyHomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // it rebuilds the Ui based on state, takes a bloc and a state
-          BlocBuilder<CounterBloc, CounterState>(
+          // BlocBuilder<CounterBloc, CounterState>(
 
-              // u can use buildwhen for conditional Ui Update
-              buildWhen: (previous, current) {
-            // print(previous.counter);
-            // print(current.counter);
-            return true;
-          }, builder: (context, state) {
-            return Text(
-              state.counter.toString(),
-              style: const TextStyle(fontSize: 20),
-            );
+          //     // u can use buildwhen for conditional Ui Update
+          //     buildWhen: (previous, current) {
+          //   // print(previous.counter);
+          //   // print(current.counter);
+          //   return true;
+          // }, builder: (context, state) {
+          //   return Text(
+          //     state.counter.toString(),
+          //     style: const TextStyle(fontSize: 20),
+          //   );
+          // }),
+          BlocConsumer<CounterBloc, CounterState>(builder: (context, state) {
+            return Text(state.counter.toString());
+          }, listener: (context, state) {
+            if (state.counter >= 5) {
+              final snackBar = SnackBar(
+                /// need to set following properties for best effect of awesome_snackbar_content
+                elevation: 0,
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Colors.transparent,
+                content: AwesomeSnackbarContent(
+                  title: 'Its Working',
+                  message: 'You have reached the Goal. !!',
+
+                  /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                  contentType: ContentType.success,
+                ),
+              );
+
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(snackBar);
+            }
           }),
-          // const SizedBox(
-          //   height: 40,
+          // BlocListener<CounterBloc, CounterState>(
+          //   listener: (context, state) {
+          //     if (state.counter >= 5) {
+          //       final snackBar = SnackBar(
+          //         /// need to set following properties for best effect of awesome_snackbar_content
+          //         elevation: 0,
+          //         behavior: SnackBarBehavior.floating,
+          //         backgroundColor: Colors.transparent,
+          //         content: AwesomeSnackbarContent(
+          //           title: 'Its Working',
+          //           message: 'This is an example !!',
+
+          //           /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+          //           contentType: ContentType.success,
+          //         ),
+          //       );
+
+          //       ScaffoldMessenger.of(context)
+          //         ..hideCurrentSnackBar()
+          //         ..showSnackBar(snackBar);
+          //     }
+          //   },
+          //   child: const Text("Bloc Listener"),
           // ),
+          const SizedBox(
+            height: 40,
+          ),
           Row(
             children: [
               const Spacer(),
